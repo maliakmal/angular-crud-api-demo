@@ -1,0 +1,133 @@
+
+<div *ngIf="isCurrentPost()">
+<div id="overlay"></div>
+
+<div class="modal show" style="display:block;"  tabindex="-1" role="dialog" aria-hidden="false">
+  <div class="modal-dialog" role="document">
+    <form #postForm="ngForm" (ngSubmit)="savePost()">
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">{{ isCurrentEditablePost() ? 'Edit Post ID '+currentPost.id:'New Post' }} </h4>
+        <button type="button" class="close" (click)="clearCurrentPost()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+        
+      <div class="modal-body">
+      <div class="form-group">
+        <label for="id">UserID</label>
+        <div class="input-group">
+          <input id="userId" 
+            #userId="ngModel" 
+            [(ngModel)]="currentPost.userId" 
+            class="form-control" 
+            required 
+            pattern="[0-9]*"
+            placeholder="Enter User ID" name="userId" />
+        </div>
+        <div [hidden]="userId.valid || userId.pristine" class="alert alert-danger">
+          UserId must be a number
+        </div>
+
+
+      </div>
+      <div class="form-group">
+        <label for="title">title</label>
+        <div class="input-group">
+          <input id="title" #title="ngModel" [(ngModel)]="currentPost.title" class="form-control" required placeholder="Enter Title" name="title" />
+        </div>
+        <div [hidden]="title.valid || title.pristine" class="alert alert-danger">
+          Title is required
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="id">Body</label>
+        <div class="input-group">
+          <textarea id="body" #body="ngModel" [(ngModel)]="currentPost.body"  class="form-control" required placeholder="Enter Body" name="body"></textarea>
+        </div>
+        <div [hidden]="body.valid || body.pristine" class="alert alert-danger">
+          Body is required
+        </div>
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button [disabled]="!postForm.form.valid" type="submit" class="btn btn-primary">
+          <span *ngIf="!isSubmitted">Save changes</span>
+          <span *ngIf="isSubmitted">Saving</span>
+        </button>
+      </div>
+    </div>
+    </form>
+  </div>
+</div>
+</div>
+<div *ngIf="isCurrentDeletablePost()">
+<div id="overlay"></div>
+<div class="modal show" style="display:block;"  tabindex="-1" role="dialog" aria-hidden="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Confirm Delete</h4>
+        <button type="button" class="close" (click)="cancelDeletePost()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete this record?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" (click)="confirmDeletePost()" class="btn btn-danger">Yes</button>
+        <button type="button" (click)="cancelDeletePost()" class="btn btn-light">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<br/>
+<br/>
+<div class="row">
+  <div class="col-md-8">
+    <div class="list-scroll">
+    <div class="list-group ">
+      <div *ngFor="let post of posts;index as idx;"  class="list-group-item list-group-item-action flex-column align-items-start">
+        <div class="d-flex w-100 justify-content-between">
+          <h4 class="mb-1">
+            <span class="badge badge-light">ID: {{ post.id }}</span> {{ post.title }}
+          </h4>
+        </div>
+        <hr/>
+        <p>{{ post.body }}</p>
+          <div class="btn-group pull-right">
+            <a href="#" (click)="editPost(post)" class="btn btn-sm btn-dark">edit</a>
+            <a href="#" (click)="deletePost(idx)" class="btn btn-sm btn-danger">delete</a>
+          </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card card-default">
+      <div class="card-body">
+        <button class="btn block btn-lg btn-outline-primary" (click)="newPost()">New Post</button>
+        <div class="card mt-3">
+          <div class="card-body">
+            <p>This demo makes the following assumptions:</p>
+            <ul>
+              <li>UserID must be a number</li>
+              <li>All fields are required</li>
+              <li>API doesn't really create or update newly created posts</li>
+              <li>Editing a newly created post edits the post locally and attempts to make an api update</li>
+              <li>Deleting a newly created post deletes the post locally and attempts to make an api delete</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+  <hr/>
+  <p>Prepared by <a href="http://www.mohammadaliakmal.com">Mohammad Ali Akmal</a></p>
+</footer>
