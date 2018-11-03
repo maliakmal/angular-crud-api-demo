@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PostService } from '../../services/post/post.service';
 import { Post } from '../../models/post.model';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { Validators } from '@angular/forms';
-import { FormArray } from '@angular/forms';
 
 @Component({
   selector: 'app-posts',
@@ -12,19 +9,13 @@ import { FormArray } from '@angular/forms';
 })
 
 export class PostsComponent implements OnInit {
-  postForm = this.formBuilder.group({
-    userId: ['', [Validators.required]],
-    title: ['', [Validators.required]],
-    body: ['', [Validators.required]]
-  });
   
-  private posts;
-  private currentPost;
-  private postIdxToDelete;
+  public posts;
+  public currentPost;
+  public postIdxToDelete;
   isSubmitted = false;
 
-
-  constructor(private postService:PostService, private formBuilder: FormBuilder) {}
+  constructor(private postService:PostService) {}
 
   ngOnInit() {
     this.currentPost = null;
@@ -58,9 +49,6 @@ export class PostsComponent implements OnInit {
     return true;
   }
   
-  onSubmit(){
-
-  }
 
   savePost(){
     this.isSubmitted = true;
